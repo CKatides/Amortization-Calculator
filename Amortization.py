@@ -1,5 +1,6 @@
 import os
 import sys
+import pandas as pd
 
 """
 A is the payment amount per period, based on the included formula
@@ -15,17 +16,29 @@ def showtable(P,r,n,A):
     startingprincipal = P
     monthlyinterest = r
     count = 1
+    
+    df1 = pd.DataFrame(columns = ['Payment No.','Interest','Principal','Balance'])
+
     while P > 0:
         interestpayment = monthlyinterest * P
         principalpayment = A - interestpayment
         remainingbalance = P - principalpayment
+        
+        
         if remainingbalance <= 0:
             break
         else:
-            print("Payment " + str(count) + " Interest: $%.2f" % (interestpayment) + " Principal: $%.2f" % (principalpayment) + " Balance: $%.2f" % (remainingbalance))
+            # print("Payment " + str(count) + " Interest: $%.2f" % (interestpayment) + " Principal: $%.2f" % (principalpayment) + " Balance: $%.2f" % (remainingbalance))
+
+            s1 = pd.Series(data = {'Payment No.': count, 'Interest': interestpayment, 'Principal': principalpayment, 'Balance': remainingbalance})
+            
+            df1 = df1.append(s1, ignore_index = True)
+            df1 = df1.round(2)
+
+
             P = remainingbalance
             count += 1
-    
+    print(df1)
 
 print("\nWhat is the total loan amount?\n")
 P = input()
